@@ -1,24 +1,37 @@
 
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { Iuser } from 'src/users/dto/userDto';
-
+import { Iuser, IuserRegister } from 'src/users/dto/userDto';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from "bcrypt"
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService,     private jwtService: JwtService
+  ) {}
 
   async signIn(userDto:Iuser): Promise<any> {
-    const user = await this.usersService.findOne(userDto.username);
-    if (user?.password !== userDto.password) {
-      throw new UnauthorizedException();
+    const user = await this.usersService.findOne(userDto.id);
+
+    userDto.password = userDto.password as string;
+    user.password = user?.password as string;
+
+    if(userDto.password && user.password){
+
     }
-    const { password, ...result } = user;
-    // TODO: Generate a JWT and return it here
-    // instead of the user object
-    return result;
+
+    const validPassword =  bcrypt.compare(userDto.password,user.password)
+
+    if(!validPassword){
+      throw new UnauthorizedException;
+    }
+    const payload = { sub: user?.id, username: user?.username };
+
+    return {access_token: await this.jwtService.signAsync(payload) };
   }
 
-  async register(user: Iuser): Promise<any> {
-    
+  async register(userDto: any): Promise<any> {
+    const createUser = this.usersService.create(userDto);
   }
+
+  
 }
