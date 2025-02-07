@@ -11,7 +11,7 @@ export class UsersService {
   // Find a user by ID
   async findOne(id: number | undefined): Promise<UserDTO> {
     try {
-      const user = await prisma.user.findUnique({ where: { id } });
+      const user = await prisma.user.findFirstOrThrow({ where: { id } });
       if (!user) {
         throw new NotFoundException(`User with ID ${id} not found.`);
       }

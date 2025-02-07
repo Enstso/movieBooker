@@ -10,7 +10,7 @@ async function bootstrap() {
     .setTitle('API Documentation')
     .setDescription('Documentation des endpoints de l’API')
     .setVersion('1.0')
-    .addBearerAuth() // Si vous utilisez l'authentification JWT
+    .addBearerAuth({in:'header',type:'http'}) // Si vous utilisez l'authentification JWT
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

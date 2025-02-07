@@ -21,6 +21,13 @@ model User {
   roles Role[]
 }
 
+model Reservation {
+  id Int @id @default(autoincrement())
+  user_id Int 
+  movie_id Int
+  reservationDate DateTime
+}
+
 enum Role {
   ADMIN
   USER

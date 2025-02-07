@@ -15,6 +15,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Successful login.' })
   @ApiResponse({ status: 401, description: 'Invalid credentials.' })
   @HttpCode(HttpStatus.OK)
+  @Public()
   @Post('login')
   signIn(@Body() user: LoginDto) {
     return this.authService.signIn(user);
@@ -24,6 +25,7 @@ export class AuthController {
   @ApiResponse({ status: 201, description: 'User successfully created.' })
   @ApiResponse({ status: 400, description: 'Invalid data.' })
   @HttpCode(HttpStatus.CREATED)
+  @Public()
   @Post('register')
   register(@Body() newUser: RegisterDto) {
     return this.authService.register(newUser);
@@ -34,7 +36,7 @@ export class AuthController {
   @Public()
   @Get('test')
   findAll() {
-    return [];
+    return ['fdt'];
   }
 
   @ApiBearerAuth() // Indicates that this endpoint requires a Bearer token (JWT)

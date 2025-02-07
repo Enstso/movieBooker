@@ -16,6 +16,7 @@ import { AuthGuard } from './auth.guard';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
+    
   ],
   providers: [AuthService,{provide: APP_GUARD, useClass: AuthGuard}],
   controllers: [AuthController],

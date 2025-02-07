@@ -32,6 +32,4 @@ export class AuthService {
   async register(userDto: any): Promise<any> {
     const createUser = this.usersService.create(userDto);
   }
-
-  
 }
