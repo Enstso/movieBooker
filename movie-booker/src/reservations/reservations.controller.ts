@@ -1,7 +1,7 @@
-import { Controller, Post, Get, Delete, Body, Query, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Body, Param, ParseIntPipe, UseGuards, Req } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationDto } from './dto/reservation.dto';
-import { ApiTags, ApiOperation, ApiQuery, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('reservations')
@@ -15,18 +15,17 @@ export class ReservationsController {
   @ApiOperation({ summary: 'Create a new reservation' })
   @ApiResponse({ status: 201, description: 'Reservation created' })
   @ApiResponse({ status: 400, description: 'Conflict: Overlapping reservation' })
-  async createReservation(@Body() reservationDto: ReservationDto) {
-    return this.reservationsService.createReservation(reservationDto);
+  async createReservation(@Body() reservationDto: ReservationDto, @Req() req) {
+    return this.reservationsService.createReservation(reservationDto, req);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get()
-  @ApiOperation({ summary: 'Get all reservations for a user' })
-  @ApiQuery({ name: 'user_id', required: true, description: 'User ID' })
+  @ApiOperation({ summary: 'Get all reservations for the authenticated user' })
   @ApiResponse({ status: 200, description: 'List of reservations' })
-  async getReservations(@Query('user_id', ParseIntPipe) user_id: number) {
-    return this.reservationsService.getUserReservations(user_id);
+  async getReservations(@Req() req) {
+    return this.reservationsService.getUserReservations(req);
   }
 
   @ApiBearerAuth()
@@ -35,7 +34,7 @@ export class ReservationsController {
   @ApiOperation({ summary: 'Cancel a reservation' })
   @ApiResponse({ status: 200, description: 'Reservation canceled' })
   @ApiResponse({ status: 404, description: 'Reservation not found' })
-  async cancelReservation(@Param('id', ParseIntPipe) id: number) {
-    return this.reservationsService.cancelReservation(id);
+  async cancelReservation(@Param('id', ParseIntPipe) id: number, @Req() req) {
+    return this.reservationsService.cancelReservation(id,req);
   }
 }

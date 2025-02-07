@@ -1,6 +1,7 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException,Req  } from '@nestjs/common';
 import { PrismaClient, Role } from '@prisma/client';
 import { ReservationDto } from './dto/reservation.dto';
+import { Request } from 'express';
 
 const prisma = new PrismaClient();
 
@@ -9,9 +10,9 @@ const prisma = new PrismaClient();
 export class ReservationsService {
   private readonly MOVIE_DURATION = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
 
-  async createReservation(dto: ReservationDto) {
-    const { user_id, movie_id, reservationDate } = dto;
-
+  async createReservation(dto: ReservationDto, @Req() req: Request) {
+    const {  movie_id, reservationDate } = dto;
+    const user_id = req['user'].sub; // Récupérer user_id depuis le token
     const reservationStart = new Date(reservationDate);
     const reservationEnd = new Date(reservationStart.getTime() + this.MOVIE_DURATION);
 
@@ -35,14 +36,15 @@ export class ReservationsService {
     });
   }
 
-  async getUserReservations(user_id: number) {
+  async getUserReservations( @Req() req: Request) {
+    const user_id = req['user'].sub; // Récupérer user_id depuis le token
     return prisma.reservation.findMany({
       where: { user_id },
       orderBy: { reservationDate: 'asc' },
     });
   }
 
-  async cancelReservation(id: number) {
+  async cancelReservation(id: number,  @Req() req: Request) {
     const reservation = await prisma.reservation.findUnique({ where: { id } });
 
     if (!reservation) {

@@ -24,6 +24,7 @@ export class MoviesController {
     return this.moviesService.getMovies(page || 1, search, sort);
   }
 
+  @Public()
   @Get('now_playing')
   @ApiOperation({ summary: 'Get currently playing movies' })
   @ApiResponse({ status: 200, description: 'List of currently playing movies' })
@@ -32,6 +33,7 @@ export class MoviesController {
     return this.moviesService.getNowPlaying();
   }
 
+  @Public()
   @Get('search')
   @ApiOperation({ summary: 'Search for a movie by title' })
   @ApiQuery({ name: 'query', required: true, description: 'Movie title to search for' })
@@ -41,6 +43,7 @@ export class MoviesController {
     return this.moviesService.searchMovie(query);
   }
 
+  @Public()
   @Get(':movie_id')
   @ApiOperation({ summary: 'Get details of a specific movie' })
   @ApiParam({ name: 'movie_id', required: true, description: 'Movie ID' })
@@ -50,6 +53,7 @@ export class MoviesController {
     return this.moviesService.getMovieDetails(movieId);
   }
 
+  @Public()
   @Get('genres')
   @ApiOperation({ summary: 'Get the list of movie genres' })
   @ApiResponse({ status: 200, description: 'List of movie genres' })
