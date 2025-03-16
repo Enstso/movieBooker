@@ -19,10 +19,10 @@ export class MoviesService {
 
       if (search) {
         // Search movies by title
-        url = `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${encodeURIComponent(search)}&page=${page}&language=fr-FR`;
+        url = `${this.baseUrl}search/movie?api_key=${this.apiKey}&query=${encodeURIComponent(search)}&page=${page}&language=fr-FR`;
       } else {
         // Get a list of popular movies
-        url = `${this.baseUrl}/popular?api_key=${this.apiKey}&page=${page}&language=fr-FR`;
+        url = `${this.baseUrl}movie/popular?api_key=${this.apiKey}&page=${page}&language=fr-FR`;
       }
 
       const response = await firstValueFrom(this.httpService.get(url));
@@ -47,7 +47,7 @@ export class MoviesService {
 
   async searchMovie(query: string) {
     try {
-      const url = `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${encodeURIComponent(query)}&language=fr-FR`;
+      const url = `${this.baseUrl}search/movie?api_key=${this.apiKey}&query=${encodeURIComponent(query)}&language=fr-FR`;
       const response = await firstValueFrom(this.httpService.get(url));
       return response.data;
     } catch (error) {
@@ -57,8 +57,9 @@ export class MoviesService {
 
   async getMovieDetails(movieId: string) {
     try {
-      const url = `${this.baseUrl}/${movieId}?api_key=${this.apiKey}&language=fr-FR`;
+      const url = `${this.baseUrl}movie/${movieId}?api_key=${this.apiKey}&language=fr-FR`;
       const response = await firstValueFrom(this.httpService.get(url));
+
       return response.data;
     } catch (error) {
       throw new HttpException('Movie not found', HttpStatus.NOT_FOUND);

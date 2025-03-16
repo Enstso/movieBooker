@@ -56,7 +56,6 @@ export class UsersService {
         const hashedPassword = await bcrypt.hash(password, 10);
         userData.password = hashedPassword;
       }
-      console.log("idd",idUser);
       const updatedUser = await prisma.user.update({
         where: { id: idUser },
         data: userData,

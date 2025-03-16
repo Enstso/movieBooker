@@ -20,7 +20,7 @@ export default function MovieList() {
   const fetchMovies = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/movies?search=${search}&page=${page}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}movies?search=${search}&page=${page}`);
       const data = await response.json();
       setMovies(data.results);
       setTotalPages(data.total_pages || 1);
@@ -43,7 +43,7 @@ export default function MovieList() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/reservations", {
+      const response = await fetch(`${import.meta.env.url}reservations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
