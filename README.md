@@ -1,6 +1,6 @@
 # MovieBooker
 
-MovieBooker is a movie reservation system featuring a **NestJS API** with **JWT authentication**, **TMDB integration**, **reservation slots**, **pagination**, and **secured endpoints**. The API is documented using **Swagger**, and the frontend is built with **React** and **TailwindCSS**.
+MoviieBooker is a movie reservation system featuring a **NestJS API** with **JWT authentication**, **TMDB integration**, **reservation slots**, **pagination**, and **secured endpoints**. The API is documented using **Swagger**, and the frontend is built with **React** and **TailwindCSS**.
 
 ## Technologies Used
 
@@ -73,7 +73,7 @@ Once the backend is running, you can access the **Swagger API Documentation** at
 ## Useful Commands
 
 ### Backend
-- `npm run start:dev` → Start backend in dev mode
+- `npm run start` → Start backend in dev mode
 - `npx prisma migrate dev` → Apply database migrations
 
 ### Frontend
