@@ -4,25 +4,25 @@ import { ApiProperty } from "@nestjs/swagger";
 export class RegisterDto {
   @ApiProperty({
     example: 'john_doe',
-    description: 'Nom d’utilisateur unique pour l’inscription',
+    description: 'Unique username for registration',
   })
-  @IsNotEmpty({ message: 'username is required' })
+  @IsNotEmpty({ message: 'Username is required' })
   @IsString()
   username: string;
 
   @ApiProperty({
     example: 'john.doe@example.com',
-    description: 'Adresse e-mail valide de l’utilisateur',
+    description: 'Valid email address of the user',
   })
-  @IsNotEmpty({ message: 'email is required' })
+  @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Invalid email format' })
   email: string;
 
   @ApiProperty({
     example: 'SecurePass123!',
-    description: 'Mot de passe sécurisé (au moins 8 caractères)',
+    description: 'Secure password (at least 8 characters)',
   })
-  @IsNotEmpty({ message: 'password is required' })
+  @IsNotEmpty({ message: 'Password is required' })
   @IsString()
   @MinLength(8, { message: 'Password must be at least 8 characters long' })
   password: string;

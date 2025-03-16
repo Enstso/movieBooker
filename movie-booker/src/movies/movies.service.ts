@@ -44,15 +44,6 @@ export class MoviesService {
       throw new HttpException('Error fetching movies', HttpStatus.BAD_REQUEST);
     }
   }
-  async getNowPlaying() {
-    try {
-      const url = `${this.baseUrl}/now_playing?api_key=${this.apiKey}&language=fr-FR`;
-      const response = await firstValueFrom(this.httpService.get(url));
-      return response.data;
-    } catch (error) {
-      throw new HttpException('Erreur lors de la récupération des films en salle', HttpStatus.BAD_REQUEST);
-    }
-  }
 
   async searchMovie(query: string) {
     try {
@@ -70,17 +61,7 @@ export class MoviesService {
       const response = await firstValueFrom(this.httpService.get(url));
       return response.data;
     } catch (error) {
-      throw new HttpException('Film non trouvé', HttpStatus.NOT_FOUND);
-    }
-  }
-
-  async getGenres() {
-    try {
-      const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${this.apiKey}&language=fr-FR`;
-      const response = await firstValueFrom(this.httpService.get(url));
-      return response.data;
-    } catch (error) {
-      throw new HttpException('Erreur lors de la récupération des genres', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Movie not found', HttpStatus.NOT_FOUND);
     }
   }
 

@@ -1,68 +1,75 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { PrismaClient, Role } from '@prisma/client';
-import { Iuser, IuserRegister, UserDTO } from './dto/userDto';
-import * as bcrypt from "bcrypt"
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { Iuser, IuserLogin, IuserRegister } from './dto/userDto';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 @Injectable()
 export class UsersService {
-
-  // Find a user by ID
-  async findOne(id: number | undefined): Promise<UserDTO> {
+  async findOne(email: string): Promise<IuserLogin> {
     try {
-      const user = await prisma.user.findFirstOrThrow({ where: { id } });
+      const user = await prisma.user.findUniqueOrThrow({ where: { email } });
       if (!user) {
-        throw new NotFoundException(`User with ID ${id} not found.`);
+        throw new NotFoundException('Verify your credentials.');
       }
       return user;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new InternalServerErrorException('Error server');
     }
   }
 
   // Create a new user
-  async create(user: any): Promise<UserDTO> {
+  async create(user: IuserRegister): Promise<void> {
     try {
-      const hashedPassword =  await bcrypt.hash(user.password,10);
-      const newUser = await prisma.user.create({
+      const { username, email, password, roles } = user;
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await prisma.user.create({
         data: {
-          username: user.username,
-          email: user.email,
+          username: username,
+          email: email,
           password: hashedPassword,
-          roles: user.roles,
+          roles: roles,
         },
       });
-      return newUser;
     } catch (error) {
-      throw new BadRequestException(`Error creating user: ${error.message}`);
+      throw new InternalServerErrorException('Error server');
     }
   }
 
   // Update an existing user
-  async update(id: number, userData: Partial<UserDTO>): Promise<UserDTO> {
+  async update(userData: Partial<IuserLogin>): Promise<Iuser> {
     try {
-      if (userData.password) {
-        const hashedPassword  =  await bcrypt.hash(userData.password,10);
+      const { email, password } = userData;
+      if (password) {
+        const hashedPassword = await bcrypt.hash(password, 10);
         userData.password = hashedPassword;
       }
       const updatedUser = await prisma.user.update({
-        where: { id },
+        where: { email },
         data: userData,
       });
       return updatedUser;
     } catch (error) {
-      throw new NotFoundException(`Error updating user with ID ${id}: ${error.message}`);
+      throw new NotFoundException('Error updating user');
     }
   }
 
   // Delete a user
   async delete(id: number): Promise<{ message: string }> {
     try {
+      if (!id) {
+        throw new BadRequestException('Error specify the Id');
+      }
       await prisma.user.delete({ where: { id } });
-      return { message: `User with ID ${id} successfully deleted.` };
+      return { message: 'User successfully deleted.' };
     } catch (error) {
-      throw new NotFoundException(`Unable to delete user with ID ${id}: ${error.message}`);
+      throw new NotFoundException('Unable to delete user');
     }
   }
 }

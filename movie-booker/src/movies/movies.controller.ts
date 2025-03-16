@@ -25,15 +25,6 @@ export class MoviesController {
   }
 
   @Public()
-  @Get('now_playing')
-  @ApiOperation({ summary: 'Get currently playing movies' })
-  @ApiResponse({ status: 200, description: 'List of currently playing movies' })
-  @ApiResponse({ status: 400, description: 'Error retrieving movies' })
-  async getNowPlaying() {
-    return this.moviesService.getNowPlaying();
-  }
-
-  @Public()
   @Get('search')
   @ApiOperation({ summary: 'Search for a movie by title' })
   @ApiQuery({ name: 'query', required: true, description: 'Movie title to search for' })
@@ -51,14 +42,5 @@ export class MoviesController {
   @ApiResponse({ status: 404, description: 'Movie not found' })
   async getMovieDetails(@Param('movie_id') movieId: string) {
     return this.moviesService.getMovieDetails(movieId);
-  }
-
-  @Public()
-  @Get('genres')
-  @ApiOperation({ summary: 'Get the list of movie genres' })
-  @ApiResponse({ status: 200, description: 'List of movie genres' })
-  @ApiResponse({ status: 400, description: 'Error retrieving genres' })
-  async getGenres() {
-    return this.moviesService.getGenres();
   }
 }

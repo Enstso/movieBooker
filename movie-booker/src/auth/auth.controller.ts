@@ -1,10 +1,24 @@
-import { Body, Controller, Get, Post, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login-dto';
 import { RegisterDto } from './dto/register-dto';
 import { AuthGuard } from './auth.guard';
 import { Public } from './constants';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Authentication') // Groups the endpoints under the "Authentication" category
 @Controller('auth')
@@ -30,15 +44,6 @@ export class AuthController {
   register(@Body() newUser: RegisterDto) {
     return this.authService.register(newUser);
   }
-
-  @ApiOperation({ summary: 'Public test endpoint' })
-  @ApiResponse({ status: 200, description: 'Returns an empty array.' })
-  @Public()
-  @Get('test')
-  findAll() {
-    return ['fdt'];
-  }
-
   @ApiBearerAuth() // Indicates that this endpoint requires a Bearer token (JWT)
   @ApiOperation({ summary: 'Retrieve the profile of the logged-in user' })
   @ApiResponse({ status: 200, description: 'User profile.' })

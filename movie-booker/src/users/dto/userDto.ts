@@ -1,29 +1,27 @@
 // dtos/UserDTO.ts
 
-import { Role } from "src/auth/roles/role.enum";
+import { Role } from 'src/auth/roles/role.enum';
 
 export interface Iuser {
-     id?: number,
-     username?: string,
-     email: string,
-     password?:string,
-     roles?: Role[]
+  id?: number;
+  username?: string;
+  email: string;
+  password?: string;
+  roles?: Role[];
 }
 
 export interface IuserRegister {
-  id: number,
-  username: string,
-  email: string,
-  password?:string,
-  roles?: Role[]
+  username: string;
+  email: string;
+  password: string;
+  roles?: Role[];
 }
-export class UserDTO implements Iuser {
-    constructor(
-      public id: number,
-      public username: string,
-      public email: string,
-      public password?: string,
-      public roles?: Role[]
-    ) {}
-  }
-  
+
+export interface IuserLogin {
+  id?
+  username?: string;
+  email: string;
+  password: string;
+  roles?: Role[];
+}
+
