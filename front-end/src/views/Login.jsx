@@ -25,9 +25,6 @@ export default function Login() {
       }
 
       localStorage.setItem("access_token", data.access_token);
-      console.log(localStorage.getItem("access_token"));
-      console.log("Login successful:", data);
-      
        window.location.href = "/movies";
 
     } catch (err) {

@@ -12,7 +12,7 @@ export class ReservationsService {
 
   async createReservation(dto: ReservationDto, @Req() req: Request) {
     const {  movie_id, reservationDate } = dto;
-    const user_id = req['user'].sub; // Récupérer user_id depuis le token
+    const user_id = req['user'].id; // Récupérer user_id depuis le token
     const reservationStart = new Date(reservationDate);
     const reservationEnd = new Date(reservationStart.getTime() + this.MOVIE_DURATION);
 
@@ -37,14 +37,14 @@ export class ReservationsService {
   }
 
   async getUserReservations( @Req() req: Request) {
-    const user_id = req['user'].sub; // Récupérer user_id depuis le token
+    const user_id = req['user'].id; // Récupérer user_id depuis le token
     return prisma.reservation.findMany({
-      where: { user_id },
+      where: { user_id:user_id },
       orderBy: { reservationDate: 'asc' },
     });
   }
 
-  async cancelReservation(id: number,  @Req() req: Request) {
+  async cancelReservation(id: number) {
     const reservation = await prisma.reservation.findUnique({ where: { id } });
 
     if (!reservation) {

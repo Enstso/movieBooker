@@ -12,15 +12,21 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class UsersService {
-  async findOne(email: string): Promise<IuserLogin> {
+  async findByEmail(email: string): Promise<IuserLogin> {
     try {
       const user = await prisma.user.findUniqueOrThrow({ where: { email } });
-      if (!user) {
-        throw new NotFoundException('Verify your credentials.');
-      }
       return user;
     } catch (error) {
-      throw new InternalServerErrorException('Error server');
+      throw new NotFoundException('Verify your credentials.');
+    }
+  }
+
+  async findById(id: number): Promise<IuserLogin> {
+    try {
+      const user = await prisma.user.findUniqueOrThrow({ where: { id } });
+      return user;
+    } catch (error) {
+      throw new NotFoundException('Verify your credentials.');
     }
   }
 
@@ -38,20 +44,21 @@ export class UsersService {
         },
       });
     } catch (error) {
-      throw new InternalServerErrorException('Error server');
+      throw new InternalServerErrorException('Error server user yet existing');
     }
   }
 
   // Update an existing user
-  async update(userData: Partial<IuserLogin>): Promise<Iuser> {
+  async update(userData: Partial<IuserLogin>, idUser: number): Promise<Iuser> {
     try {
-      const { email, password } = userData;
+      const {password } = userData;
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 10);
         userData.password = hashedPassword;
       }
+      console.log("idd",idUser);
       const updatedUser = await prisma.user.update({
-        where: { email },
+        where: { id: idUser },
         data: userData,
       });
       return updatedUser;

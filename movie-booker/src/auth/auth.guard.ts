@@ -1,23 +1,37 @@
-
-import {CanActivate, ExecutionContext, Injectable ,UnauthorizedException} from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+  OnModuleInit,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IS_PUBLIC_KEY, jwtConstants } from './constants';
 import { Request } from 'express';
-import { Reflector } from '@nestjs/core';
-
+import { Reflector, ModuleRef } from '@nestjs/core';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService, private reflector: Reflector) {}
+export class AuthGuard implements CanActivate, OnModuleInit {
+  private usersService: UsersService;
+
+  constructor(
+    private jwtService: JwtService,
+    private reflector: Reflector,
+    private moduleRef: ModuleRef, // Injecter ModuleRef pour récupérer UsersService
+  ) {}
+
+  onModuleInit() {
+    this.usersService = this.moduleRef.get(UsersService, { strict: false });
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
-   
+
     if (isPublic) {
-      // 💡 See this condition
       return true;
     }
 
@@ -26,16 +40,18 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException();
     }
+    
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
 
+      const user = await this.usersService.findById(payload.sub); // Récupérer l'utilisateur
+      if (!user) {
+        throw new UnauthorizedException();
+      }
 
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
-      request['user'] = payload;
-      console.log(request);
+      request['user'] = user; // Stocker l'utilisateur dans la requête
     } catch {
       throw new UnauthorizedException();
     }

@@ -11,11 +11,9 @@ export class AuthService {
   ) {}
 
   async signIn(userDto: IuserLogin): Promise<{ access_token: string }> {
-    const user = await this.usersService.findOne(userDto.email);
+    const user = await this.usersService.findByEmail(userDto.email);
   
-
-    const validPassword = bcrypt.compare(userDto.password, user.password);
-
+    const validPassword = await bcrypt.compare(userDto.password, user.password);
     if (!validPassword) {
       throw new UnauthorizedException();
     }

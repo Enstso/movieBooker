@@ -51,6 +51,7 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
+    delete req.user.password
     return req.user;
   }
 }

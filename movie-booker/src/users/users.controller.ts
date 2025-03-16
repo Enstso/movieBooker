@@ -23,8 +23,8 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Password updated successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  update(@Body() password: UpdatePasswordDto) {
-    return this.userService.update(password);
+  update(@Body() password: UpdatePasswordDto,@Request() req) {
+    return this.userService.update(password, req.user.id);
   }
 
   @ApiBearerAuth()

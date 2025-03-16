@@ -35,6 +35,6 @@ export class ReservationsController {
   @ApiResponse({ status: 200, description: 'Reservation canceled' })
   @ApiResponse({ status: 404, description: 'Reservation not found' })
   async cancelReservation(@Param('id', ParseIntPipe) id: number, @Req() req) {
-    return this.reservationsService.cancelReservation(id,req);
+    return this.reservationsService.cancelReservation(id);
   }
 }
