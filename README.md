@@ -47,20 +47,22 @@ This will start a **PostgreSQL** instance for your application.
 ```sh
 cd movie-booker
 cp .env.example .env
-yarn install
+npm install
 npx prisma migrate dev
-yarn start:dev
+npm run start
 ```
 The NestJS API will now run on `http://localhost:5000`.
 
 ### 3. Frontend Setup
+
+The front is Dockerized
+
 ```sh
 cd frontend
 cp .env.example .env
-yarn install
-yarn dev
+
 ```
-The frontend will now run on `http://localhost:5173"` (default Vite port) or `http://localhost:5174"`.
+The frontend will now run on `http://localhost:5173"` (default Vite port).
 
 ---
 
@@ -72,16 +74,16 @@ Once the backend is running, you can access the **Swagger API Documentation** at
 
 ## Useful Commands
 
+### Docker
+- `docker-compose up -d` → Start database
+- `docker-compose down` → Stop database
+
 ### Backend
 - `npm run start` → Start backend in dev mode
 - `npx prisma migrate dev` → Apply database migrations
 
 ### Frontend
 - `npm run dev` → Start the frontend
-
-### Docker
-- `docker-compose up -d` → Start database
-- `docker-compose down` → Stop database
 
 ---
 
@@ -92,6 +94,4 @@ Once the backend is running, you can access the **Swagger API Documentation** at
 
 ---
 
-## License
-This project is licensed under the MIT License.
 
