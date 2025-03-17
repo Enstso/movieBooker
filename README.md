@@ -81,7 +81,7 @@ Once the backend is running, you can access the **Swagger API Documentation** at
 
 ### Backend
 - `npm run start` → Start backend in dev mode
-- `npx prisma migrate dev` → Apply database migrations
+- `npx prisma db push` → Apply database 
 
 ### Frontend
 - `npm run dev` → Start the frontend

@@ -9,6 +9,7 @@ export default function App() {
       <Navbar />
       <div className="container mx-auto p-4">
         <Routes>
+        <Route path="/" element={<MovieList />} />
           <Route path="/movies" element={<MovieList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
