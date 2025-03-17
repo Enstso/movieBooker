@@ -60,6 +60,7 @@ The front is Dockerized
 ```sh
 cd frontend
 cp .env.example .env
+cp .env.example .env.local
 
 ```
 The frontend will now run on `http://localhost:5173"` (default Vite port).
