@@ -79,7 +79,7 @@ Once the backend is running, you can access the **Swagger API Documentation** at
 - `docker-compose up -d` → Start database
 - `docker-compose down` → Stop database
 
-### Backend
+### Backend (not secure auth)
 - `npm run start` → Start backend in dev mode
 - `npx prisma db push` → Apply database 
 
